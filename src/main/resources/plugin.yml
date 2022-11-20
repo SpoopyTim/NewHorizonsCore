@@ -1,0 +1,11 @@
+main: com.spoopydev.NewHorizons
+name: NewHorizonsCore
+version: '1.0'
+description: The core plugin for the New Horizons server
+author: spoopytim
+website: spoopydev.com/projects/java/plugins/newhorizonscore
+
+commands:
+  test:
+    description: Your description
+    usage: /<command>

@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'org.hidetake.ssh' version '2.10.1'
+}
+
+remotes {
+    viper {
+        host = "192.168.0.17"
+        port = 11600
+        user = 'gradletest'
+        password = 'gradle'
+        knownHosts = allowAnyHosts
+    }
+}
+
+task upload {
+    doLast {
+        ssh.run {
+            session(remotes.viper) {
+                put from: buildDir, into: '/', filter: { it.name =~ /\.jar$/ }
+//                execute 'sudo service tomcat restart'
+            }
+        }
+    }
+}
+
+jar.finalizedBy(upload)
+
+group 'com.spoopydev'
+version '1.0-SNAPSHOT'
+
+repositories {
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+    compileOnly 'org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT'
+}
+
+test {
+    useJUnitPlatform()
+}
